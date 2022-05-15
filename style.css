@@ -169,7 +169,8 @@ ul#completed-tasks label {
     display: none;
 }
 
-.footer {
+.footer, 
+.more-inf {
     padding-top: 20px;
     color: darkslategray;
     text-decoration: none;
