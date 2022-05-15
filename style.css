@@ -14,7 +14,7 @@ body {
     width: 100%;
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
     .logo {
         width: 350px;
     }    
@@ -30,7 +30,7 @@ body {
     margin: 0 auto 0;
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
     .main-wrapper {
         width: 350px;
     }
@@ -55,7 +55,7 @@ body {
 }
 
 ul {
-    margin:0;
+    margin: 0;
     padding: 0px;
 }
 
@@ -75,7 +75,7 @@ button:hover {
     font-weight: 700;
 }
 
-label[for='add-task'], h3 {
+label[for="add-task"], h3 {
     color: rgb(0, 60, 2);
     font-weight: 700;
     font-size: 15px;    
@@ -83,7 +83,7 @@ label[for='add-task'], h3 {
     text-transform: uppercase;
 }
 
-label[for='new-task'], h3 {
+label[for = "new-task"], h3 {
     color: #333;
     font-weight: 700;
     font-size: 15px;
@@ -93,7 +93,7 @@ label[for='new-task'], h3 {
     text-transform: uppercase;
 }
 
-input[type="text"] {
+input[type = "text"] {
     margin: 0;
     font-size: 18px;
     line-height: 18px;
@@ -106,20 +106,21 @@ input[type="text"] {
     color: #888;
 }
 
-input[type="text"]:focus {
+input[type = "text"]:focus {
     color: #333;
 }
 
-label[for='new-task'] {
+label[for = "new-task"] {
     display: block;
     margin: 0 0 20px;
 }
 
 input#new-task {
+    display: block;
     width: 320px;
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
     input#new-task {
         width: 220px;
     }    
@@ -134,7 +135,7 @@ li {
     align-items: center;
 }
 
-input[type="checkbox"] {
+input[type = "checkbox"] {
     margin: 0 10px;
 }
 
@@ -145,9 +146,9 @@ label.task {
     width: 226px;
 }
 
-input[type="text"] {
+input[type = "text"] {
     width: 240px;
-    display:none;
+    display: none;
 }
 
 button.delete:hover {
@@ -159,13 +160,13 @@ ul#completed-tasks label {
     color: #444;
 }
 
-.editMode input[type=text] {
+.edit-mode input[type = text] {
     display: inline-block;
     width: 225px;
 }
 
-.editMode label {
-    display:none;
+.edit-mode label {
+    display: none;
 }
 
 .footer {
@@ -176,7 +177,7 @@ ul#completed-tasks label {
     font-weight: 700;    
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
     .footer {
         width: 350px;
     }    
