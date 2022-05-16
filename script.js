@@ -35,40 +35,49 @@ const createNewTaskElement = function(taskString){
 }
 
 if (!localStorage.getItem('todos')) {
-    localStorage.todos = JSON.stringify({todo: 'Here is your first task', done: 'This task already done!'})
+    localStorage.todos = JSON.stringify([{todo: 'Here is your first task'}, {done: 'This task already done!'}])
 }
 
 const taskValue = JSON.parse(localStorage.todos);
 
 const initialize = function() {
-    for (let key in taskValue) {
-        if (key === 'todo') {
-            const listItem = createNewTaskElement(taskValue[key]);
-            WORK_TASK_HOLDER.appendChild(listItem);
-            bindTaskEvents(listItem, taskCompleted);            
-        }
+    taskValue.forEach(element => {   
+        
+        // remove for...in
+        
+        for (let key in element) {
+            if (key === 'todo') {
+                const listItem = createNewTaskElement(element[key]);
+                WORK_TASK_HOLDER.appendChild(listItem);
+                bindTaskEvents(listItem, taskCompleted);            
+            }
 
-        if (key === 'done') {    
-            const listItem = createNewTaskElement(taskValue[key]);
-            DONE_TASK_HOLDER.appendChild(listItem);
-            bindTaskEvents(listItem, taskCompleted);
-            DONE_TASK_HOLDER.checkBox.checked = true;
-        }        
-    }        
+            if (key === 'done') {    
+                const listItem = createNewTaskElement(element[key]);
+                DONE_TASK_HOLDER.appendChild(listItem);
+                bindTaskEvents(listItem, taskCompleted);
+                // listItem.checkBox.checked = true;
+            }        
+        } 
+    });       
 }
 
 const addTask = function() {        
     if (!TASK_INPUT.value) return;
     const listItem = createNewTaskElement(TASK_INPUT.value);
+
+    const addInfo = {todo: TASK_INPUT.value};
+    taskValue.push(addInfo);
     
     WORK_TASK_HOLDER.appendChild(listItem);
     bindTaskEvents(listItem, taskCompleted);
 
-    TASK_INPUT.value = '';
+    TASK_INPUT.value = '';    
 }
 
 const editTask = function(){
     const listItem = this.parentNode;
+    console.log(this.parentNode);
 
     const editInput = listItem.querySelector('input[type = text]');
     const label = listItem.querySelector('label');
@@ -86,6 +95,16 @@ const editTask = function(){
     }
     
     listItem.classList.toggle('edit-mode');
+
+    const addInfo = {todo: editInput};
+    
+    console.log(addInfo);
+    taskValue.push(addInfo);
+}
+
+const updateStorage = function() {
+    localStorage.todos = '';
+    localStorage.todos = JSON.stringify(taskValue);
 }
 
 const deleteTask = function(){
@@ -115,6 +134,8 @@ ADD_BUTTON.addEventListener('click', addTask);
 ADD_BUTTON.addEventListener('click', ajaxRequest);
 
 document.addEventListener('DOMContentLoaded', initialize);
+
+window.addEventListener('unload', updateStorage);
 
 const bindTaskEvents = function(taskListItem, checkBoxEventHandler) {
     const checkBox = taskListItem.querySelector('input[type = checkbox]');
