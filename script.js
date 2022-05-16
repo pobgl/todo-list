@@ -3,7 +3,7 @@ const ADD_BUTTON = document.getElementsByTagName('button')[0];
 const WORK_TASK_HOLDER = document.getElementById('in-process-tasks');
 const DONE_TASK_HOLDER = document.getElementById('completed-tasks');
 
-const createNewTaskElement = function(taskString){
+const createNewTaskElement = function(taskString) {
 
     const listItem = document.createElement('li');
     const checkBox = document.createElement('input');
@@ -34,40 +34,33 @@ const createNewTaskElement = function(taskString){
     return listItem;
 }
 
-if (!localStorage.getItem('todos')) {
-    localStorage.todos = JSON.stringify([{todo: 'Here is your first task'}, {done: 'This task already done!'}])
-}
-
-const taskValue = JSON.parse(localStorage.todos);
-
 const initialize = function() {
-    taskValue.forEach(element => {   
-        
-        // remove for...in
-        
-        for (let key in element) {
-            if (key === 'todo') {
-                const listItem = createNewTaskElement(element[key]);
-                WORK_TASK_HOLDER.appendChild(listItem);
-                bindTaskEvents(listItem, taskCompleted);            
-            }
+    if (!localStorage.getItem('todos')) {
+        const listItem = createNewTaskElement('Here is your first task');
+        WORK_TASK_HOLDER.appendChild(listItem);        
+    }
 
-            if (key === 'done') {    
-                const listItem = createNewTaskElement(element[key]);
-                DONE_TASK_HOLDER.appendChild(listItem);
-                bindTaskEvents(listItem, taskCompleted);
-                // listItem.checkBox.checked = true;
-            }        
-        } 
-    });       
+    if (localStorage.getItem('todos' || 'done')) {
+        const workItemStructure = localStorage.getItem('todos');
+        const workItemEmptyNode = document.getElementById('in-process-tasks');
+        workItemEmptyNode.innerHTML = workItemStructure;
+        
+        const doneItemStructure = localStorage.getItem('done');
+        const doneItemEmptyNode = document.getElementById('completed-tasks');
+        doneItemEmptyNode.innerHTML = doneItemStructure;       
+
+        WORK_TASK_HOLDER.append(workItemEmptyNode);
+        DONE_TASK_HOLDER.append(doneItemEmptyNode);       
+    }
+
+    editTask();
+
+    // ADD_BUTTON.addEventListener ('click', addTask);    
 }
 
 const addTask = function() {        
     if (!TASK_INPUT.value) return;
     const listItem = createNewTaskElement(TASK_INPUT.value);
-
-    const addInfo = {todo: TASK_INPUT.value};
-    taskValue.push(addInfo);
     
     WORK_TASK_HOLDER.appendChild(listItem);
     bindTaskEvents(listItem, taskCompleted);
@@ -76,8 +69,7 @@ const addTask = function() {
 }
 
 const editTask = function(){
-    const listItem = this.parentNode;
-    console.log(this.parentNode);
+    const listItem = this.parentNode;    
 
     const editInput = listItem.querySelector('input[type = text]');
     const label = listItem.querySelector('label');
@@ -95,49 +87,48 @@ const editTask = function(){
     }
     
     listItem.classList.toggle('edit-mode');
-
-    const addInfo = {todo: editInput};
-    
-    console.log(addInfo);
-    taskValue.push(addInfo);
 }
 
 const updateStorage = function() {
+    const todoNode = document.getElementById('in-process-tasks');
+    const doneNode = document.getElementById('completed-tasks');
+
+    console.log(todoNode.innerHTML);
+    console.log(doneNode.innerHTML);
+
     localStorage.todos = '';
-    localStorage.todos = JSON.stringify(taskValue);
+    localStorage.todos = todoNode.innerHTML;
+
+    localStorage.done = '';
+    localStorage.done = doneNode.innerHTML;
 }
 
-const deleteTask = function(){
+const deleteTask = function () {
     const listItem = this.parentNode;
     const ul = listItem.parentNode;    
     ul.removeChild(listItem);
 }
 
-const taskCompleted = function(){    
+const taskCompleted = function () {    
     const listItem = this.parentNode;
     DONE_TASK_HOLDER.appendChild(listItem);
     bindTaskEvents(listItem, taskIncomplete);
 }
 
-const taskIncomplete = function(){    
+const taskIncomplete = function () {    
     const listItem = this.parentNode;
     WORK_TASK_HOLDER.appendChild(listItem);
     bindTaskEvents(listItem,taskCompleted);
 }
 
-const ajaxRequest = function(){
-    console.log('AJAX Request');
-}
-
 ADD_BUTTON.onclick = addTask;
-ADD_BUTTON.addEventListener('click', addTask);
-ADD_BUTTON.addEventListener('click', ajaxRequest);
+ADD_BUTTON.addEventListener ('click', addTask);
 
-document.addEventListener('DOMContentLoaded', initialize);
+document.addEventListener ('DOMContentLoaded', initialize);
 
-window.addEventListener('unload', updateStorage);
+window.addEventListener ('unload', updateStorage);
 
-const bindTaskEvents = function(taskListItem, checkBoxEventHandler) {
+const bindTaskEvents = function (taskListItem, checkBoxEventHandler) {
     const checkBox = taskListItem.querySelector('input[type = checkbox]');
     const editButton = taskListItem.querySelector('button.edit');
     const deleteButton = taskListItem.querySelector('button.delete');
