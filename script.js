@@ -39,7 +39,7 @@ const initialize = function() {
         const listItem = createNewTaskElement('Here is your first task');
         WORK_TASK_HOLDER.appendChild(listItem);        
               
-        bindTaskEvents(listItem, taskIncompleted);
+        bindTaskEvents(listItem, taskCompleted);
     }
 
     if (localStorage.getItem('todos' || 'done')) {
