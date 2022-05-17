@@ -38,24 +38,27 @@ const initialize = function() {
     if (!localStorage.getItem('todos')) {
         const listItem = createNewTaskElement('Here is your first task');
         WORK_TASK_HOLDER.appendChild(listItem);        
+              
+        bindTaskEvents(listItem, taskIncompleted);
     }
 
     if (localStorage.getItem('todos' || 'done')) {
-        const workItemStructure = localStorage.getItem('todos');
-        const workItemEmptyNode = document.getElementById('in-process-tasks');
-        workItemEmptyNode.innerHTML = workItemStructure;
+        const workItemStructure = localStorage.getItem('todos');        
+        WORK_TASK_HOLDER.innerHTML = workItemStructure;
+
+        for (let i = 0; i < WORK_TASK_HOLDER.children.length; i++) {
+            bindTaskEvents(WORK_TASK_HOLDER.children[i], taskCompleted);
+        }
         
-        const doneItemStructure = localStorage.getItem('done');
-        const doneItemEmptyNode = document.getElementById('completed-tasks');
-        doneItemEmptyNode.innerHTML = doneItemStructure;       
+        const doneItemStructure = localStorage.getItem('done');        
+        DONE_TASK_HOLDER.innerHTML = doneItemStructure;
+        
 
-        WORK_TASK_HOLDER.append(workItemEmptyNode);
-        DONE_TASK_HOLDER.append(doneItemEmptyNode);       
-    }
-
-    editTask();
-
-    // ADD_BUTTON.addEventListener ('click', addTask);    
+        for (let i = 0; i < DONE_TASK_HOLDER.children.length; i++){    
+            bindTaskEvents(DONE_TASK_HOLDER.children[i], taskIncompleted);
+            DONE_TASK_HOLDER.querySelectorAll('input[type = checkbox]')[i].checked = true;           
+        } 
+    }          
 }
 
 const addTask = function() {        
@@ -112,10 +115,10 @@ const deleteTask = function () {
 const taskCompleted = function () {    
     const listItem = this.parentNode;
     DONE_TASK_HOLDER.appendChild(listItem);
-    bindTaskEvents(listItem, taskIncomplete);
+    bindTaskEvents(listItem, taskIncompleted);
 }
 
-const taskIncomplete = function () {    
+const taskIncompleted = function () {    
     const listItem = this.parentNode;
     WORK_TASK_HOLDER.appendChild(listItem);
     bindTaskEvents(listItem,taskCompleted);
@@ -143,5 +146,5 @@ for (let i = 0; i < WORK_TASK_HOLDER.children.length; i++) {
 }
 
 for (let i = 0; i < DONE_TASK_HOLDER.children.length; i++){    
-    bindTaskEvents(DONE_TASK_HOLDER.children[i],taskIncomplete);
+    bindTaskEvents(DONE_TASK_HOLDER.children[i],taskIncompleted);
 }
